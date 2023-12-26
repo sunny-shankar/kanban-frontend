@@ -5,7 +5,8 @@ import userStore from "../store/user";
 const AddColumn = () => {
   const [column, setColumn] = useState("");
   const { VITE_BASE_URL } = import.meta.env;
-  const { userToken, toggleLoading } = userStore();
+  const { userToken, toggleLoading, addLists } = userStore();
+
   const addColumn = async () => {
     toggleLoading();
     const { data } = await axios({
@@ -18,9 +19,9 @@ const AddColumn = () => {
         access_token: userToken,
       },
     });
-    console.log({ data });
     toggleLoading();
   };
+
   return (
     <div>
       <button
@@ -48,6 +49,7 @@ const AddColumn = () => {
               placeholder="Type here"
               className="input input-bordered w-full max-w-xs"
               onChange={(e) => setColumn(e.target.value)}
+              required
             />
             <form
               method="dialog"
