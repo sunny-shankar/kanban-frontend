@@ -10,21 +10,26 @@ const Login = () => {
   const { VITE_BASE_URL } = import.meta.env;
   const { userToken, setUserToken, toggleLoading, setUserEmail } = userStore();
   const handleLogin = async () => {
-    toggleLoading();
-    const { data } = await axios({
-      url: VITE_BASE_URL + "/api/v1/user/login",
-      method: "POST",
-      data: {
-        email,
-        password,
-      },
-    }).catch((err) => err.response);
+    try {
+      toggleLoading();
+      const { data } = await axios({
+        url: VITE_BASE_URL + "/api/v1/user/login",
+        method: "POST",
+        data: {
+          email,
+          password,
+        },
+      }).catch((err) => err.response);
 
-    if (data.success) {
-      setUserToken(data.data.access_token);
-      setUserEmail(email);
+      if (data.success) {
+        setUserToken(data.data.access_token);
+        setUserEmail(email);
+      }
+      toggleLoading();
+    } catch (err) {
+      console.log(err);
+      toggleLoading();
     }
-    toggleLoading();
   };
 
   return (
