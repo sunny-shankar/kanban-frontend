@@ -25,7 +25,7 @@ const AddColumn = () => {
   return (
     <div>
       <button
-        className="btn"
+        className="btn mx-5"
         onClick={() => document.getElementById("my_modal_3").showModal()}
       >
         Add Column

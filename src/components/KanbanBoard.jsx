@@ -7,7 +7,7 @@ import Loading from "./Loading";
 import List from "./List";
 
 export default function KanbanBoard() {
-  const { userToken, addLists, lists } = userStore();
+  const { userToken, addLists, lists, toggleLoading } = userStore();
   const { VITE_BASE_URL } = import.meta.env;
 
   const getUserLists = async () => {
@@ -35,10 +35,12 @@ export default function KanbanBoard() {
     );
   };
 
-  const handleDrag = (data) => {
+  const handleDrag = async (data) => {
+    toggleLoading();
     const { destination, draggableId } = data;
     const { droppableId } = destination;
-    updateTask(draggableId, droppableId);
+    await updateTask(draggableId, droppableId);
+    toggleLoading();
   };
 
   useEffect(() => {

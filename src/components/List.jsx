@@ -7,7 +7,7 @@ import userStore from "../store/user";
 export default function List({ title, id }) {
   const [tasks, setTask] = useState([]);
   const [value, setValue] = useState("");
-  const { userToken } = userStore();
+  const { userToken, toggleLoading } = userStore();
   const { VITE_BASE_URL } = import.meta.env;
 
   const getTask = async () => {
@@ -61,8 +61,8 @@ export default function List({ title, id }) {
     getTask();
   }, []);
   return (
-    <div className="bg-neutral-content w-80 h-96 overflow-y-scroll rounded-md shadow-md no-scrollbar text-white">
-      <h1 className="p-2 text-xl font-bold text-center bg-neutral rounded-sm">
+    <div className="bg-neutral-content w-80 h-96 overflow-y-scroll rounded-md shadow-md no-scrollbar text-white mx-3">
+      <h1 className="py-3 text-xl font-bold text-center bg-neutral rounded-sm">
         {title}
       </h1>
       <Droppable droppableId={`${id}`}>
@@ -85,7 +85,10 @@ export default function List({ title, id }) {
               <input
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
-                    addTask({ id, value });
+                    if (value != "") {
+                      addTask({ id, value });
+                      e.target.value = "";
+                    }
                   }
                 }}
                 type="text"
