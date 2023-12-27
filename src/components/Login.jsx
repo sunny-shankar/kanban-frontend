@@ -5,9 +5,10 @@ import axios from "axios";
 
 const Login = () => {
   const [email, setEmail] = useState("test@test.com");
+
   const [password, setPassword] = useState("test123");
   const { VITE_BASE_URL } = import.meta.env;
-  const { userToken, setUserToken, toggleLoading } = userStore();
+  const { userToken, setUserToken, toggleLoading, setUserEmail } = userStore();
   const handleLogin = async () => {
     toggleLoading();
     const { data } = await axios({
@@ -17,8 +18,12 @@ const Login = () => {
         email,
         password,
       },
-    });
-    setUserToken(data.data.access_token);
+    }).catch((err) => err.response);
+
+    if (data.success) {
+      setUserToken(data.data.access_token);
+      setUserEmail(email);
+    }
     toggleLoading();
   };
 
@@ -37,10 +42,11 @@ const Login = () => {
           </span>
         </div>
         <input
-          type="text"
+          type="email"
           placeholder="Type here"
           className="input input-bordered w-full max-w-xs"
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
       </label>
       <label className="form-control w-full max-w-xs">
@@ -51,9 +57,10 @@ const Login = () => {
         </div>
         <input
           type="password"
-          placeholder="Type here"
+          placeholder="Password"
           className="input input-bordered w-full max-w-xs"
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
       </label>
       <button className="btn btn-primary mt-10 font-bold">
